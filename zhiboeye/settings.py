@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'zhiboeye.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mxonline',
+        'NAME': 'platform',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '127.0.0.1',
