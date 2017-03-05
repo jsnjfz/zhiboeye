@@ -4,6 +4,7 @@ from .models import PlatForm, ChannelDict
 
 # Create your views here.
 
+
 class IndexView(View):
     def get(self, request):
         all_info = PlatForm.objects.all().order_by('-watch_num')[:30]
