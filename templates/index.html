@@ -99,7 +99,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="row placeholders">
-                {% for single in all_info %}
+                {% for single in info.object_list %}
                     <div class="col-xs-6 col-sm-2 placeholder"><a href="{{ single.url }}" target="_blank">
                     <div data-type="1" class="iconimgPos"></div>
                     <div data-bg="{{ single.room_thumb }}"
@@ -114,8 +114,34 @@
                     <div class="clearfix"></div>
                 </div>
                 {% endfor %}
-
             </div>
+{#            <div id="pagination">#}
+{#            {{ all_info.render }}#}
+{#            </div>#}
+        {% load i18n %}
+<div class="pagination">
+    {% if info.has_previous %}
+        <a href="?{{ info.previous_page_number.querystring }}" class="prev">&lsaquo;&lsaquo; {% trans "上一页" %}</a>
+    {% else %}
+        <span class="disabled prev">&lsaquo;&lsaquo; {% trans "上一页" %}</span>
+    {% endif %}
+    {% for page in info.pages %}
+        {% if page %}
+            {% ifequal page info.number %}
+                <span class="current page">{{ page }}</span>
+            {% else %}
+                <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
+            {% endifequal %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    {% if info.has_next %}
+        <a href="?{{ info.next_page_number.querystring }}" class="next">{% trans "下一页" %} &rsaquo;&rsaquo;</a>
+    {% else %}
+        <span class="disabled next">{% trans "下一页" %} &rsaquo;&rsaquo;</span>
+    {% endif %}
+</div>
         </div>
     </div>
 </div><!--Bootstrap core JavaScript
