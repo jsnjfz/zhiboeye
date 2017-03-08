@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.shortcuts import render
 from django.views.generic.base import View
 
@@ -10,9 +11,15 @@ from .models import PlatForm, ChannelDict
 
 class IndexView(View):
     def get(self, request):
-        all_info = PlatForm.objects.all().order_by('-watch_num')#[:30]
+        all_info = PlatForm.objects.all().order_by('-watch_num')
+        filter_info = PlatForm.objects.all().order_by('-watch_num')[:200]
         all_num = all_info.count()
         all_channel_type = ChannelDict.objects.all()
+
+        #取出筛选频道
+        type_id = request.GET.get('type', "")
+        if type_id:
+            filter_info = all_info.filter(channel_type=int(type_id))[:200]
 
         try:
             page = request.GET.get('page', 1)
@@ -21,7 +28,7 @@ class IndexView(View):
 
         # Provide Paginator with the request object for complete querystring generation
 
-        p = Paginator(all_info, 10 , request=request)
+        p = Paginator(filter_info, 30 , request=request)
 
         info = p.page(page)
 
