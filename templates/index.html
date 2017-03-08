@@ -1,13 +1,169 @@
 <!DOCTYPE html>
+<!-- saved from url=(0025)http://www.zhiboeye.com/ -->
 <html lang="en">
+{% load staticfiles %}
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags-->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>视频</title><!-- Bootstrap core CSS-->
+    <link href="{% static 'bootstrap.min.css' %}" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug-->
+    <link href="{% static 'ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="{% static 'dashboard.css' %}" rel="stylesheet">
+    <script async="" src="{% static 'analytics.js' %}"></script>
+    <script src="{% static 'jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'lazysizes.min.js' %}"></script>
+    <script src="{% static 'common.js' %}"></script>
+    <script src="{% static 'main.min.js' %}"></script>
+    <script src="{% static 'pinyin_dict_notone.min.js' %}"></script>
+    <script src="{% static 'pinyinUtil.min.js' %}"></script>
 </head>
 <body>
-<h1>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">综合视频</span><span
+                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            <ul class="nav navbar-nav hidden-xs">
+                <li class="active"><a href="http://www.foxmiguel.com/">首页</a></li>
+                <li><a href="http://www.foxmiguel.com/history">浏览历史</a></li>
+            </ul>
+            <div class="visible-xs-block"><a href="http://www.foxmiguel.com/" class="froce navbar-brand">首页</a><a
+                    href="http://www.foxmiguel.com/history" class="navbar-brand">浏览历史</a></div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right hidden-xs">
+                <li><a href="http://www.foxmiguel.com/#">Mail:foxmiguel0815@gmail.com</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            {% for channel_type in all_channel_type %}
+                <ul data-iid="1" class="nav nav-sidebar" style="display: block;">
+                    <li><a href="http://www.foxmiguel.com/?type=1">{{ channel_type.channel_name }}</a></li>
+                </ul>
+            {% endfor %}
 
-</h1>
+            <!--<ul data-iid="0" class="nav nav-sidebar" style="display: block;">
+                <li class="active"><a href="http://www.foxmiguel.com/?type=0">Dota2<span
+                        class="sr-only">(current)</span></a></li>
+            </ul>-->
 
+            <!--<div class="dashang"><img src="{% static 'dashang.jpg' %}"></div>-->
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"><h1 class="page-header">Dota2</h1>
+            <div class="row rowsearch">
+                <div class="col-xs-6 col-sm-4">
+                    <div class="input-group"><input type="text" placeholder="关键词" class="form-control"><span
+                            class="input-group-btn"><button type="button" class="btn btn-default">搜索</button></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="0" class="btn btn-default shaixuanyo">熊猫TV</div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="1" class="btn btn-default shaixuanyo">斗鱼TV</div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="2" class="btn btn-default shaixuanyo btn-danger">战旗TV</div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="3" class="btn btn-default shaixuanyo">虎牙TV</div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="4" class="btn btn-default shaixuanyo">火猫TV</div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="5" class="btn btn-default shaixuanyo">全民TV</div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="6" class="btn btn-default shaixuanyo">龙珠TV</div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="7" class="btn btn-default shaixuanyo">网易CC</div>
+                </div>
+                <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
+                    <div data-type="8" class="btn btn-default shaixuanyo">b站</div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="row placeholders">
+                {% for single in info.object_list %}
+                    <div class="col-xs-6 col-sm-2 placeholder"><a href="{{ single.url }}" target="_blank">
+                    <div data-type="1" class="iconimgPos"></div>
+                    <div data-bg="{{ single.room_thumb }}"
+                         class="imgShow lazyloaded"
+                         style="background-image: url(&quot;https://rpic.douyucdn.cn/a1703/04/18/1352148_170304184822.jpg&quot;);">
+                        <img src="{% static 'demo.png' %}" width="100%" height="auto">
+                    </div>
+                    <h5 class="smallTitle">{{ single.name }}</h5>
+                    <div class="renshuyo"><span title="人数:{{ single.watch_num }}" class="text-muted">{{ single.watch_num }}</span><h5
+                            title="{{ single.room_desc }}" class="text-muted">{{ single.room_desc }}</h5></div>
+                </a>
+                    <div class="clearfix"></div>
+                </div>
+                {% endfor %}
+            </div>
+{#            <div id="pagination">#}
+{#            {{ all_info.render }}#}
+{#            </div>#}
+        {% load i18n %}
+<div class="pagination">
+    {% if info.has_previous %}
+        <a href="?{{ info.previous_page_number.querystring }}" class="prev">&lsaquo;&lsaquo; {% trans "上一页" %}</a>
+    {% else %}
+        <span class="disabled prev">&lsaquo;&lsaquo; {% trans "上一页" %}</span>
+    {% endif %}
+    {% for page in info.pages %}
+        {% if page %}
+            {% ifequal page info.number %}
+                <span class="current page">{{ page }}</span>
+            {% else %}
+                <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
+            {% endifequal %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    {% if info.has_next %}
+        <a href="?{{ info.next_page_number.querystring }}" class="next">{% trans "下一页" %} &rsaquo;&rsaquo;</a>
+    {% else %}
+        <span class="disabled next">{% trans "下一页" %} &rsaquo;&rsaquo;</span>
+    {% endif %}
+</div>
+        </div>
+    </div>
+</div><!--Bootstrap core JavaScript
+==================================================--><!-- Placed at the end of the document so the pages load faster-->
+<script src="{% static 'index/bootstrap.min.js' %}"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line!-->
+<script src="{% static 'index/holder.min.js' %}"></script><!-- IE10 viewport hack for Surface/desktop Windows 8 bug-->
+<script src="{% static 'index/ie10-viewport-bug-workaround.js' %}"></script>
+<script>(function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+ga('create', 'UA-45989368-2', 'auto');
+ga('send', 'pageview');</script>
+<audio controls="controls" style="display: none;"></audio>
 </body>
+
 </html>
