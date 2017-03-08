@@ -49,7 +49,7 @@
         <div class="col-sm-3 col-md-2 sidebar">
             {% for channel_type in all_channel_type %}
                 <ul data-iid="1" class="nav nav-sidebar" style="display: block;">
-                    <li><a href="?type={{ channel_type.id }}">{{ channel_type.channel_name }}</a></li>
+                    <li><a href="?type={{ channel_type.channel_type }}">{{ channel_type.channel_name }}</a></li>
                 </ul>
             {% endfor %}
 
