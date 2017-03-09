@@ -22,31 +22,127 @@
     <script src="{% static 'main.min.js' %}"></script>
     <script src="{% static 'pinyin_dict_notone.min.js' %}"></script>
     <script src="{% static 'pinyinUtil.min.js' %}"></script>
+
+    <style>
+    .navbar-inverse {
+      background-color: #fff;
+      border-bottom: 1px solid #e4e5e7;
+    }
+
+    .color-line {
+      background: #f7f9fa;
+      height: 6px;
+      background-image: -webkit-linear-gradient(left, #34495e, #34495e 25%, #9b59b6 25%, #9b59b6 35%, #3498db 35%, #3498db 45%, #62cb31 45%, #62cb31 55%, #ffb606 55%, #ffb606 65%, #e67e22 65%, #e67e22 75%, #e74c3c 85%, #e74c3c 85%, #c0392b 85%, #c0392b 100%);
+      background-image: -moz-linear-gradient(left, #34495e, #34495e 25%, #9b59b6 25%, #9b59b6 35%, #3498db 35%, #3498db 45%, #62cb31 45%, #62cb31 55%, #ffb606 55%, #ffb606 65%, #e67e22 65%, #e67e22 75%, #e74c3c 85%, #e74c3c 85%, #c0392b 85%, #c0392b 100%);
+      background-image: -ms-linear-gradient(left, #34495e, #34495e 25%, #9b59b6 25%, #9b59b6 35%, #3498db 35%, #3498db 45%, #62cb31 45%, #62cb31 55%, #ffb606 55%, #ffb606 65%, #e67e22 65%, #e67e22 75%, #e74c3c 85%, #e74c3c 85%, #c0392b 85%, #c0392b 100%);
+      background-image: linear-gradient(to right, #34495e, #34495e 25%, #9b59b6 25%, #9b59b6 35%, #3498db 35%, #3498db 45%, #62cb31 45%, #62cb31 55%, #ffb606 55%, #ffb606 65%, #e67e22 65%, #e67e22 75%, #e74c3c 85%, #e74c3c 85%, #c0392b 85%, #c0392b 100%);
+      background-size: 100% 6px;
+      background-position: 50% 100%;
+      background-repeat: no-repeat;
+    }
+
+    .navbar-inverse .navbar-nav>li>a {
+      color: #6a6c6f;
+      border-right: 1px solid #e4e5e7;
+    }
+
+    .navbar-inverse .navbar-nav>li>a:focus,
+    .navbar-inverse .navbar-nav>li>a:hover {
+      color: #6a6c6f;
+    }
+
+    .navbar-inverse .navbar-nav>.active>a,
+    .navbar-inverse .navbar-nav>.active>a:focus,
+    .navbar-inverse .navbar-nav>.active>a:hover {
+      color: #34495e;
+      background-color: #f7f9fa;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .container-fluid {
+      padding-left: 0px;
+    }
+
+    .nav>li>a {
+      padding: 15px 27px;
+    }
+
+    .sidebar {
+      background-color: #fff;
+      padding-bottom: 0;
+      padding-top: 5px;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      display: none
+    }
+
+    .nav-sidebar>.active>a,
+    .nav-sidebar>.active>a:hover,
+    .nav-sidebar>.active>a:focus {
+      color: #6a6c6f;
+      background-color: #f7f9fa;
+    }
+
+    .nav-sidebar>li>a {
+      color: #9ca0a7;
+      border-bottom: 1px solid #e4e5e7;
+    }
+
+    .rowsearch {
+      bottom: 0;
+    }
+
+    .renshuyo span {
+      width: 39%;
+      font-size: 15px;
+    }
+
+    .renshuyo h5 {
+      width: 60%;
+    }
+
+    .btn-default {
+      color: #777;
+    }
+
+    .btn-danger {
+      color: #fff;
+      background-color: #d9534f;
+      border-color: #d43f3a;
+    }
+
+    .placeholders h5 {
+      font-size: 15px;
+    }
+  </style>
+
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="color-line"></div>
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
                     aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">综合视频</span><span
                     class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
             <ul class="nav navbar-nav hidden-xs">
-                <li class="active"><a href="http://www.foxmiguel.com/">首页</a></li>
-                <li><a href="http://www.foxmiguel.com/history">浏览历史</a></li>
+                <li class="active"><a href="http://www.foxmiguel.com/">直 播 之 眼</a></li>
             </ul>
             <div class="visible-xs-block"><a href="http://www.foxmiguel.com/" class="froce navbar-brand">首页</a><a
                     href="http://www.foxmiguel.com/history" class="navbar-brand">浏览历史</a></div>
         </div>
-        {#        <div id="navbar" class="navbar-collapse collapse">#}
-        {#            <ul class="nav navbar-nav navbar-right hidden-xs">#}
-        {#                <li><a href="http://www.foxmiguel.com/#">Mail:foxmiguel0815@gmail.com</a></li>#}
-        {#            </ul>#}
-        {#        </div>#}
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right hidden-xs">
+                <li><a href="http://www.foxmiguel.com/#" style="border: none;">Mail:foxmiguel0815@gmail.com</a></li>
+            </ul>
+        </div>
     </div>
 </nav>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="col-sm-3 col-md-1 sidebar">
             {% for channel_type in all_channel_type %}
                 <ul data-iid="1" class="nav nav-sidebar" style="display: block;">
                     <li><a href="?type={{ channel_type.channel_type }}">{{ channel_type.channel_name }}</a></li>
@@ -60,15 +156,15 @@
 
             <!--<div class="dashang"><img src="{% static 'dashang.jpg' %}"></div>-->
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"><h1 class="page-header">Dota2</h1>
+        <div class="col-sm-9 col-sm-offset-3 col-md-11 col-md-offset-1 main"><h1 class="page-header">Dota2</h1>
             <div class="row rowsearch">
                 <div class="col-xs-6 col-sm-4">
                     <div class="input-group"><input type="text" placeholder="关键词" class="form-control"><span
-                            class="input-group-btn"><button type="button" class="btn btn-default">搜索</button></span>
+                            class="input-group-btn"><button type="button" class="btn btn-success">搜 索</button></span>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top: 18px;">
                 <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
                     <div data-type="0" class="btn btn-default shaixuanyo">熊猫TV</div>
                 </div>

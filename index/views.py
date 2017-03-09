@@ -12,8 +12,8 @@ from .models import PlatForm, ChannelDict
 
 class IndexView(View):
     def get(self, request):
-        all_info = PlatForm.objects.filter(status=1).order_by('-watch_num')
-        filter_info = PlatForm.objects.filter(status=1).order_by('-watch_num')[:200]
+        all_info = PlatForm.objects.all().order_by('-watch_num')
+        filter_info = PlatForm.objects.all().order_by('-watch_num')[:200]
         all_num = all_info.count()
         all_channel_type = ChannelDict.objects.all().order_by('channel_type')
 
@@ -28,7 +28,7 @@ class IndexView(View):
             page = 1
 
         # Provide Paginator with the request object for complete querystring generation
-        p = Paginator(filter_info, 30, request=request)
+        p = Paginator(filter_info, 18, request=request)
 
         info = p.page(page)
 
