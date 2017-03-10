@@ -12,7 +12,7 @@ class PlatForm(models.Model):
     platform_type = models.CharField(max_length=20, verbose_name=u"平台类型")
     # platform_desc = models.CharField(max_length=100, verbose_name=u"平台描述")
     channel_name = models.CharField(max_length=100, verbose_name=u"频道名称")
-    channel_type = models.IntegerField(verbose_name=u"频道类型")
+    channel_type = models.CharField(max_length=100, verbose_name=u"频道类型")
     # channel_desc = models.CharField(max_length=100, verbose_name=u"频道描述")
     room_id = models.IntegerField(verbose_name=u"房间号")
     room_desc = models.CharField(max_length=100, verbose_name=u"房间描述")
@@ -36,11 +36,8 @@ class PlatForm(models.Model):
 class PlatFormDict(models.Model):
     platform_type = models.CharField(max_length=100, verbose_name=u"平台类型")
     platform_name = models.CharField(max_length=100, verbose_name=u"平台名称")
-    platform_desc = models.CharField(max_length=100, verbose_name=u"平台描述")
-
 
 
 class ChannelDict(models.Model):
+    channel_type = models.CharField(max_length=100, verbose_name=u"频道类型")
     channel_name = models.CharField(max_length=100, verbose_name=u"频道名称")
-    channel_type = models.IntegerField(verbose_name=u"频道类型")
-    channel_desc = models.CharField(max_length=100, verbose_name=u"频道描述")
