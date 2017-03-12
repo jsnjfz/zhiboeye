@@ -4,7 +4,7 @@ from django.views.generic.base import View
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
-from .models import PlatForm, ChannelDict
+from .models import PlatForm, ChannelDict, PlatFormDict
 
 
 # Create your views here.
@@ -15,12 +15,15 @@ class IndexView(View):
         all_info = PlatForm.objects.all().order_by('-watch_num')
         filter_info = PlatForm.objects.all().order_by('-watch_num')[:200]
         all_num = all_info.count()
-        all_channel_type = ChannelDict.objects.all().order_by('channel_type')
+
+        all_channel = ChannelDict.objects.all().order_by('channel_type')
+
+        all_platform = PlatFormDict.objects.filter(status=1)
 
         # 取出筛选频道
-        type_id = request.GET.get('type', "")
-        if type_id:
-            filter_info = all_info.filter(channel_type=int(type_id))[:200]
+        type_name = request.GET.get('name', "")
+        if type_name:
+            filter_info = all_info.filter(channel_name=type_name)[:200]
 
         try:
             page = request.GET.get('page', 1)
@@ -34,6 +37,8 @@ class IndexView(View):
 
         return render(request, "index.html", {
             "info": info,
-            "all_channel_type": all_channel_type,
-            "all_num": all_num
+            "all_channel": all_channel,
+            "all_platform": all_platform,
+            "all_num": all_num,
+            "type_name": type_name,
         })

@@ -36,6 +36,7 @@ class PlatForm(models.Model):
 class PlatFormDict(models.Model):
     platform_type = models.CharField(max_length=100, verbose_name=u"平台类型")
     platform_name = models.CharField(max_length=100, verbose_name=u"平台名称")
+    status = models.IntegerField(choices=((0, u"无效"), (1, u"有效")), default=1, verbose_name=u"状态")
 
 
 class ChannelDict(models.Model):

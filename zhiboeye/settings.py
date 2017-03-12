@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-b6%iyzjm-y&0+a!o2nvh9l3w0@w81g9eo@qs5i&bpo5y+)gx5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'index',
     'pure_pagination',
+    'gunicorn',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -127,6 +128,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'collected')
 
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 10,
