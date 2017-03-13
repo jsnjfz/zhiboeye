@@ -53,7 +53,7 @@ def ajaxchannel(request):
     # 取出筛选频道
     search = request.POST.get('search', "")
     plat_name = request.POST.get('site', "all")
-    type_name = request.POST.get('classify', "英雄联盟")
+    type_name = request.POST.get('classify', "")
     filter_info = PlatForm.objects.all().order_by('-watch_num')[:60].values('url', 'name', 'room_thumb', 'watch_num',
                                                                       'room_desc', 'platform_name')
     if search:
