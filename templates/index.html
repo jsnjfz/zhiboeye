@@ -17,11 +17,151 @@
     <link href="{% static 'dashboard.css' %}" rel="stylesheet">
     <script async="" src="{% static 'analytics.js' %}"></script>
     <script src="{% static 'jquery-1.9.1.min.js' %}"></script>
-    <script src="{% static 'lazysizes.min.js' %}"></script>
+    <!--<script src="{% static 'lazysizes.min.js' %}"></script>-->
     <script src="{% static 'common.js' %}"></script>
-    <script src="{% static 'main.min.js' %}"></script>
+    <!--<script src="{% static 'main.min.js' %}"></script>-->
     <script src="{% static 'pinyin_dict_notone.min.js' %}"></script>
     <script src="{% static 'pinyinUtil.min.js' %}"></script>
+    <script>
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
+
+        $(function () {
+            // 获取查询字符串
+            function getQueryStringArgs() {
+                var qs = (location.search.length > 0 ? location.search.substring(1) : ''),
+                    args = {},
+                    items = qs.length ? qs.split('&') : [],
+                    item = null,
+                    name = null,
+                    value = null,
+                    len = items.length;
+
+                for (var i = 0; i < len; i++) {
+                    item = items[i].split('=');
+                    name = decodeURIComponent(item[0]);
+                    value = decodeURIComponent(item[1]);
+
+                    if (name.length) {
+                        args[name] = value;
+                    }
+                }
+
+                return args;
+            }
+
+            // 创建HTML
+            function createHTML(data) {
+                var $liveList = $('#live-list');
+                var $pagination = $('.pagination');
+                var htmlStr = '';
+                var paginationStr = '';
+
+                JSON.parse(data.liveList).forEach(function (itm) {
+                    htmlStr += '<div class="col-xs-6 col-sm-2 placeholder">' +
+                        '<a href="' + itm.url + '" target="_blank">' +
+                        '<div class="imgShow lazyloaded" style="background-image: url(' + itm.room_thumb + ');">' +
+                        '<img src="{% static 'demo.png' %}" width="100%" height="auto">' +
+                        '</div>' +
+                        '<h5 class="smallTitle">' + itm.name + '</h5>' +
+                        '<div class="renshuyo"><span class="text-muted">' + itm.watch_num + '</span>' +
+                        '<h5 class="text-muted">' + itm.room_desc + '</h5>' +
+                        '</div>' +
+                        '</a>' +
+                        '<div class="clearfix"></div>' +
+                        '<h5>' + itm.platform_name + '</h5>' +
+                        '</div>';
+                });
+
+                // 创建分页HTML
+                function createPaginationStr() {
+                    if (data.page == 1) {
+                        paginationStr += '<span data-page="" class="disabled page">‹‹ 上一页 </span>';
+                    } else {
+                        paginationStr += '<span data-page="' + (data.page - 1) + '" class="page">‹‹ 上一页 </span>';
+                    }
+
+
+                    var row = parseInt((data.page - 1) / 10);
+
+                    for (var i = 1; i < 11; i++) {
+                        var index = 10 * row + i;
+                        if (index > data.total) {
+                            break;
+                        }
+                        paginationStr += '<span data-page="' + index + '" class="page ' + (index == data.page ? 'disabled' : '') + '">' + index + ' </span>';
+                    }
+                    ;
+
+                    if (data.page == data.total) {
+                        paginationStr += '<span data-page="" class="disabled page">下一页 ››</span>';
+                    } else {
+                        paginationStr += '<span data-page="' + (data.page + 1) + '" class="page">下一页 ››</span>';
+                    }
+
+                }
+
+                createPaginationStr();
+
+                $liveList.empty().html(htmlStr);
+                $pagination.empty().html(paginationStr);
+            }
+
+            // 发送Ajax请求
+            function createLiveList(classify, site, page, search) {
+                console.info(classify, site, page, search);
+                $.post('/ajaxchannel/', {
+                    'classify': classify, // 主题分类
+                    'site': site, // 直播网址
+                    'page': page, // 页码
+                    'search': search // 搜索词
+                }, function (res) {
+                    if (res.success) {
+                        createHTML(res.data);
+                    } else {
+                        alert(res.msg);
+                    }
+                });
+
+                {#                createHTML(data);#}
+            }
+
+            // 初始化
+            function init() {
+                createLiveList(args.name, '斗鱼TV', 1, '');
+            }
+
+            var args = getQueryStringArgs();
+            init();
+
+            // 搜索
+            $('#btn-search').on('click', function () {
+                $('.shaixuanyo').removeClass('btn-danger');
+                var site = $('.btn-danger').data('site') ;
+                var search = $('#input-key').val().trim();
+                createLiveList(args.name, site, 1, search);
+            });
+
+            // 平台切换
+            $('.shaixuanyo').on('click', function () {
+                $('.shaixuanyo').removeClass('btn-danger');
+                $(this).addClass('btn-danger');
+                var site = $(this).data('site');
+                var search = $('#input-key').val().trim();
+                createLiveList(args.name, site, 1, search);
+            });
+
+            // 分页
+            $(document).on('click', '.page:not(.disabled)', function () {
+                var site = $('.btn-danger').data('site') || 'all';
+                var page = $(this).data('page');
+                var search = $('#input-key').val().trim();
+                createLiveList(args.name, site, page, search);
+                return false;
+            });
+        });
+    </script>
 
     <style>
         .navbar-inverse {
@@ -117,6 +257,22 @@
             font-size: 15px;
         }
 
+        .pagination .page {
+            color: #337ab7;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .pagination .page:hover {
+            color: #23527c;
+            text-decoration: underline;
+        }
+
+        .pagination .disabled.page,
+        .pagination .disabled.page:hover {
+            color: #333;
+            text-decoration: none;
+        }
     </style>
 
 </head>
@@ -154,71 +310,77 @@
 
             <!--<div class="dashang"><img src="{% static 'dashang.jpg' %}"></div>-->
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-11 col-md-offset-1 main"><h1 class="page-header">{{ type_name }}</h1>
+        <div class="col-sm-9 col-sm-offset-3 col-md-11 col-md-offset-1 main"><h1
+                class="page-header">{{ type_name }}</h1>
             <div class="row rowsearch">
                 <div class="col-xs-6 col-sm-4">
-                    <div class="input-group"><input type="text" placeholder="关键词" class="form-control"><span
-                            class="input-group-btn"><button type="button" class="btn btn-success">搜 索</button></span>
+                    {#                    <div class="input-group"><input type="text" placeholder="关键词" class="form-control"><span#}
+                    {#                            class="input-group-btn"><button type="button" class="btn btn-success">搜 索</button></span>#}
+                    {#                    </div>#}
+                    <div class="input-group"><input id="input-key" type="text" placeholder="关键词"
+                                                    class="form-control"><span class="input-group-btn">
+                        <button id="btn-search" type="button" class="btn btn-success">搜 索</button></span>
                     </div>
                 </div>
             </div>
             <div class="row" style="margin-top: 18px;">
                 {% for platform in all_platform %}
                     <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
-                        <div data-type="0" class="btn btn-default shaixuanyo">{{ platform.platform_name }}</div>
+{#  如果是第一个 class 加一个类                  btn-danger#}
+                        <div data-site="{{ platform.platform_name }}" class="btn btn-default shaixuanyo">{{ platform.platform_name }}</div>
                     </div>
                 {% endfor %}
                 <div class="clearfix"></div>
             </div>
-            <div class="row placeholders">
-                {% for single in info.object_list %}
-                    <div class="col-xs-6 col-sm-2 placeholder">
-                        <a href="{{ single.url }}" target="_blank">
-{#                            <div data-type="1" class="iconimgPos"></div>#}
-                            <div data-bg="{{ single.room_thumb }}"
-                                 class="imgShow lazyloaded"
-                                 style="background-image: url('{{ single.room_thumb }}');">
-                                <img src="{% static 'demo.png' %}" width="100%" height="auto">
-                            </div>
-                            <h5 class="smallTitle">{{ single.name }}</h5>
-                            <div class="renshuyo"><span title="人数:{{ single.watch_num }}"
-                                                        class="text-muted">{{ single.watch_num }}</span>
-                                <h5 title="{{ single.room_desc }}" class="text-muted">{{ single.room_desc }}</h5>
-                            </div>
-                        </a>
-                        <div class="clearfix"></div>
-                        <h5 >{{ single.platform_name }}</h5>
-                    </div>
-                {% endfor %}
+            <div id="live-list" class="row placeholders">
+{#                {% for single in info.object_list %}#}
+{#                    <div class="col-xs-6 col-sm-2 placeholder">#}
+{#                        <a href="{{ single.url }}" target="_blank">#}
+                            {#                            <div data-type="1" class="iconimgPos"></div>#}
+{#                            <div data-bg="{{ single.room_thumb }}"#}
+{#                                 class="imgShow lazyloaded"#}
+{#                                 style="background-image: url('{{ single.room_thumb }}');">#}
+{#                                <img src="{% static 'demo.png' %}" width="100%" height="auto">#}
+{#                            </div>#}
+{#                            <h5 class="smallTitle">{{ single.name }}</h5>#}
+{#                            <div class="renshuyo"><span title="人数:{{ single.watch_num }}"#}
+{#                                                        class="text-muted">{{ single.watch_num }}</span>#}
+{#                                <h5 title="{{ single.room_desc }}" class="text-muted">{{ single.room_desc }}</h5>#}
+{#                            </div>#}
+{#                        </a>#}
+{#                        <div class="clearfix"></div>#}
+{#                        <h5>{{ single.platform_name }}</h5>#}
+{#                    </div>#}
+{#                {% endfor %}#}
             </div>
             {#            <div id="pagination">#}
             {#            {{ all_info.render }}#}
             {#            </div>#}
             {% load i18n %}
             <div class="pagination">
-                {% if info.has_previous %}
-                    <a href="?{{ info.previous_page_number.querystring }}"
-                       class="prev">&lsaquo;&lsaquo; {% trans "上一页" %}</a>
-                {% else %}
-                    <span class="disabled prev">&lsaquo;&lsaquo; {% trans "上一页" %}</span>
-                {% endif %}
-                {% for page in info.pages %}
-                    {% if page %}
-                        {% ifequal page info.number %}
-                            <span class="current page">{{ page }}</span>
-                        {% else %}
-                            <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
-                        {% endifequal %}
-                    {% else %}
-                        ...
-                    {% endif %}
-                {% endfor %}
-                {% if info.has_next %}
-                    <a href="?{{ info.next_page_number.querystring }}"
-                       class="next">{% trans "下一页" %} &rsaquo;&rsaquo;</a>
-                {% else %}
-                    <span class="disabled next">{% trans "下一页" %} &rsaquo;&rsaquo;</span>
-                {% endif %}
+                {#                {% if info.has_previous %}#}
+                {#                    <a href="?{{ info.previous_page_number.querystring }}"#}
+                {#                       class="prev">&lsaquo;&lsaquo; {% trans "上一页" %}</a>#}
+                {#                {% else %}#}
+                {#                    <span class="disabled prev">&lsaquo;&lsaquo; {% trans "上一页" %}</span>#}
+                {#                {% endif %}#}
+                {#                {% for page in info.pages %}#}
+                {#                    {% if page %}#}
+                {#                        {% ifequal page info.number %}#}
+                {#                            <span class="current page">{{ page }}</span>#}
+                {#                        {% else %}#}
+                {#                            <a href="?{{ page.querystring }}" class="page">{{ page }}</a>#}
+                {#                        {% endifequal %}#}
+                {#                    {% else %}#}
+                {#                        ...#}
+                {#                    {% endif %}#}
+                {#                {% endfor %}#}
+                {#                {% if info.has_next %}#}
+                {#                    <a href="?{{ info.next_page_number.querystring }}"#}
+                {#                       class="next">{% trans "下一页" %} &rsaquo;&rsaquo;</a>#}
+                {#                {% else %}#}
+                {#                    <span class="disabled next">{% trans "下一页" %} &rsaquo;&rsaquo;</span>#}
+                {#                {% endif %}#}
             </div>
         </div>
     </div>
@@ -231,10 +393,10 @@
 <script>(function (i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
     a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
+        m = s.getElementsByTagName(o)[0];
     a.async = 1;
     a.src = g;
     m.parentNode.insertBefore(a, m)

@@ -1,8 +1,11 @@
 # coding: utf-8
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic.base import View
-
-from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from pure_pagination import Paginator, PageNotAnInteger
 
 from .models import PlatForm, ChannelDict, PlatFormDict
 
@@ -36,9 +39,39 @@ class IndexView(View):
         info = p.page(page)
 
         return render(request, "index.html", {
-            "info": info,
+            # "info": info,
             "all_channel": all_channel,
             "all_platform": all_platform,
-            "all_num": all_num,
-            "type_name": type_name,
-        })
+            # "all_num": all_num,
+            "type_name": type_name, }
+        )
+
+
+
+def ajaxchannel(request):
+    # 取出筛选频道
+    plat_name = request.POST.get('site', "")
+    type_name = request.POST.get('classify', "")
+    if type_name:
+        filter_info = PlatForm.objects.filter(platform_name=plat_name)[:20].values('url', 'name', 'room_thumb', 'watch_num',
+                                                                      'room_desc', 'platform_name')
+    # try:
+    #     page = request.GET.get('page', 1)
+    # except PageNotAnInteger:
+    #     page = 1
+    #
+    # # Provide Paginator with the request object for complete querystring generation
+    # p = Paginator(filter_info, 18, request=request)
+    #
+    # info = p.page(page)
+
+    serialized_q = json.dumps(list(filter_info), cls=DjangoJSONEncoder)
+
+    name_dict = {
+        'success': True,
+        'data': {'page': 1,
+                 'total': 1,
+                 'liveList': serialized_q}
+
+    }
+    return JsonResponse(name_dict)
