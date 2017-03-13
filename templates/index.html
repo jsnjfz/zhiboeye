@@ -135,7 +135,7 @@
             // 搜索
             $('#btn-search').on('click', function () {
                 $('.shaixuanyo').removeClass('btn-danger');
-                var site = $('.btn-danger').data('site') || 'all' ;
+                var site = $('.btn-danger').data('site') || 'all';
                 var search = $('#input-key').val().trim();
                 createLiveList(args.name, site, 1, search);
             });
@@ -211,9 +211,9 @@
             padding-top: 5px;
         }
 
-{#        .sidebar::-webkit-scrollbar {#}
-{#            display: none#}
-{#        }#}
+        {#        .sidebar::-webkit-scrollbar {#}
+        {#            display: none#}
+        {#        }#}
 
         .nav-sidebar > .active > a,
         .nav-sidebar > .active > a:hover,
@@ -271,6 +271,15 @@
             text-decoration: none;
         }
     </style>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b2049e646eea7b8a0ea1cc9e97bd89aa";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 
 </head>
 <body>
@@ -314,7 +323,8 @@
             <div class="row" style="margin-top: 18px;">
                 {% for platform in all_platform %}
                     <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
-                        <div data-site="{{ platform.platform_name }}" class="btn btn-default shaixuanyo ">{{ platform.platform_name }}</div>
+                        <div data-site="{{ platform.platform_name }}"
+                             class="btn btn-default shaixuanyo ">{{ platform.platform_name }}</div>
                     </div>
                 {% endfor %}
                 <div class="clearfix"></div>
@@ -332,6 +342,23 @@
 <!-- Just to make our placeholder images work. Don't actually copy the next line!-->
 <script src="{% static 'holder.min.js' %}"></script><!-- IE10 viewport hack for Surface/desktop Windows 8 bug-->
 <script src="{% static 'ie10-viewport-bug-workaround.js' %}"></script>
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-93572016-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
 <audio controls="controls" style="display: none;"></audio>
 </body>
 
