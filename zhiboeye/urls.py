@@ -20,7 +20,7 @@ from index import views
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # url(r'^admin/', admin.site.urls),
     url(r'^$', IndexView.as_view(), name="index"),
     url(r'^ajaxchannel/$', views.ajaxchannel, name='ajaxchannel'),
 ]

@@ -9,7 +9,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags-->
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>直播之眼</title><!-- Bootstrap core CSS-->
+    <title>直播汇总</title><!-- Bootstrap core CSS-->
     <link href="{% static 'bootstrap.min.css' %}" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug-->
     <link href="{% static 'ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
@@ -111,10 +111,10 @@
             function createLiveList(classify, site, page, search) {
                 console.info(classify, site, page, search);
                 $.post('/ajaxchannel/', {
-                    'classify': classify, // 主题分类
-                    'site': site, // 直播网址
-                    'page': page, // 页码
-                    'search': search // 搜索词
+                    'classify': classify,
+                    'site': site,
+                    'page': page,
+                    'search': search
                 }, function (res) {
                     if (res.success) {
                         createHTML(res.data);
@@ -122,13 +122,11 @@
                         alert(res.msg);
                     }
                 });
-
-                {#                createHTML(data);#}
             }
 
             // 初始化
             function init() {
-                createLiveList(args.name, '斗鱼TV', 1, '');
+                createLiveList(args.name, 'all', 1, '');
             }
 
             var args = getQueryStringArgs();
@@ -137,7 +135,7 @@
             // 搜索
             $('#btn-search').on('click', function () {
                 $('.shaixuanyo').removeClass('btn-danger');
-                var site = $('.btn-danger').data('site') ;
+                var site = $('.btn-danger').data('site') || 'all' ;
                 var search = $('#input-key').val().trim();
                 createLiveList(args.name, site, 1, search);
             });
@@ -213,9 +211,9 @@
             padding-top: 5px;
         }
 
-        .sidebar::-webkit-scrollbar {
-            display: none
-        }
+{#        .sidebar::-webkit-scrollbar {#}
+{#            display: none#}
+{#        }#}
 
         .nav-sidebar > .active > a,
         .nav-sidebar > .active > a:hover,
@@ -283,12 +281,13 @@
             <ul class="nav navbar-nav hidden-xs">
                 <li class="active"><a href="http://www.zhiboeye.com/">直 播 之 眼</a></li>
             </ul>
-            <div class="visible-xs-block"><a href="http://www.zhiboeye.com/" class="froce navbar-brand">首页</a><a
-                    href="http://www.foxmiguel.com/history" class="navbar-brand">浏览历史</a></div>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right hidden-xs">
                 <li><a href="#" style="border: none;">Mail:jsclfz@protonmail.com</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-left hidden-xs">
+                <li><a href="#" style="border: none;">各大直播平台汇总，目前支持斗鱼TV与熊猫TV，更多平台加入中...</a></li>
             </ul>
         </div>
     </div>
@@ -301,21 +300,11 @@
                     <li><a href="?name={{ channel.channel_name }}">{{ channel.channel_name }}</a></li>
                 </ul>
             {% endfor %}
-
-            <!--<ul data-iid="0" class="nav nav-sidebar" style="display: block;">
-                <li class="active"><a href="http://www.foxmiguel.com/?type=0">Dota2<span
-                        class="sr-only">(current)</span></a></li>
-            </ul>-->
-
-            <!--<div class="dashang"><img src="{% static 'dashang.jpg' %}"></div>-->
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-11 col-md-offset-1 main"><h1
-                class="page-header">{{ type_name }}</h1>
+                class="page-header">{% if type_name == "" %}全部直播{% endif %}{{ type_name }}</h1>
             <div class="row rowsearch">
                 <div class="col-xs-6 col-sm-4">
-                    {#                    <div class="input-group"><input type="text" placeholder="关键词" class="form-control"><span#}
-                    {#                            class="input-group-btn"><button type="button" class="btn btn-success">搜 索</button></span>#}
-                    {#                    </div>#}
                     <div class="input-group"><input id="input-key" type="text" placeholder="关键词"
                                                     class="form-control"><span class="input-group-btn">
                         <button id="btn-search" type="button" class="btn btn-success">搜 索</button></span>
@@ -325,62 +314,16 @@
             <div class="row" style="margin-top: 18px;">
                 {% for platform in all_platform %}
                     <div class="col-xs-3 col-sm-2 col-lg-1 placeholder">
-{#  如果是第一个 class 加一个类                  btn-danger#}
-                        <div data-site="{{ platform.platform_name }}" class="btn btn-default shaixuanyo">{{ platform.platform_name }}</div>
+                        <div data-site="{{ platform.platform_name }}" class="btn btn-default shaixuanyo ">{{ platform.platform_name }}</div>
                     </div>
                 {% endfor %}
                 <div class="clearfix"></div>
             </div>
             <div id="live-list" class="row placeholders">
-{#                {% for single in info.object_list %}#}
-{#                    <div class="col-xs-6 col-sm-2 placeholder">#}
-{#                        <a href="{{ single.url }}" target="_blank">#}
-                            {#                            <div data-type="1" class="iconimgPos"></div>#}
-{#                            <div data-bg="{{ single.room_thumb }}"#}
-{#                                 class="imgShow lazyloaded"#}
-{#                                 style="background-image: url('{{ single.room_thumb }}');">#}
-{#                                <img src="{% static 'demo.png' %}" width="100%" height="auto">#}
-{#                            </div>#}
-{#                            <h5 class="smallTitle">{{ single.name }}</h5>#}
-{#                            <div class="renshuyo"><span title="人数:{{ single.watch_num }}"#}
-{#                                                        class="text-muted">{{ single.watch_num }}</span>#}
-{#                                <h5 title="{{ single.room_desc }}" class="text-muted">{{ single.room_desc }}</h5>#}
-{#                            </div>#}
-{#                        </a>#}
-{#                        <div class="clearfix"></div>#}
-{#                        <h5>{{ single.platform_name }}</h5>#}
-{#                    </div>#}
-{#                {% endfor %}#}
+
             </div>
-            {#            <div id="pagination">#}
-            {#            {{ all_info.render }}#}
-            {#            </div>#}
             {% load i18n %}
-            <div class="pagination">
-                {#                {% if info.has_previous %}#}
-                {#                    <a href="?{{ info.previous_page_number.querystring }}"#}
-                {#                       class="prev">&lsaquo;&lsaquo; {% trans "上一页" %}</a>#}
-                {#                {% else %}#}
-                {#                    <span class="disabled prev">&lsaquo;&lsaquo; {% trans "上一页" %}</span>#}
-                {#                {% endif %}#}
-                {#                {% for page in info.pages %}#}
-                {#                    {% if page %}#}
-                {#                        {% ifequal page info.number %}#}
-                {#                            <span class="current page">{{ page }}</span>#}
-                {#                        {% else %}#}
-                {#                            <a href="?{{ page.querystring }}" class="page">{{ page }}</a>#}
-                {#                        {% endifequal %}#}
-                {#                    {% else %}#}
-                {#                        ...#}
-                {#                    {% endif %}#}
-                {#                {% endfor %}#}
-                {#                {% if info.has_next %}#}
-                {#                    <a href="?{{ info.next_page_number.querystring }}"#}
-                {#                       class="next">{% trans "下一页" %} &rsaquo;&rsaquo;</a>#}
-                {#                {% else %}#}
-                {#                    <span class="disabled next">{% trans "下一页" %} &rsaquo;&rsaquo;</span>#}
-                {#                {% endif %}#}
-            </div>
+
         </div>
     </div>
 </div><!--Bootstrap core JavaScript

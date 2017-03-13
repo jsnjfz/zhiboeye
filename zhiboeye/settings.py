@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-b6%iyzjm-y&0+a!o2nvh9l3w0@w81g9eo@qs5i&bpo5y+)gx5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'index',
-    'pure_pagination',
+    # 'gunicorn',
+    # 'pure_pagination',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -130,7 +131,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'collected')
+STATIC_ROOT = os.path.join(BASE_DIR, 'collected')
 
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 10,
