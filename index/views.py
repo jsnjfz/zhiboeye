@@ -67,6 +67,13 @@ def ajaxchannel(request):
             else:
                 filter_info = PlatForm.objects.filter(channel_name=type_name).order_by('-watch_num')[:60].values('url', 'name', 'room_thumb', 'watch_num',
                                               'room_desc', 'platform_name')
+        else:
+            if plat_name != "all":
+                filter_info = PlatForm.objects.filter(platform_name=plat_name).order_by('-watch_num')[:60].values('url', 'name', 'room_thumb', 'watch_num',
+                                                                          'room_desc', 'platform_name')
+            else:
+                filter_info = PlatForm.objects.all().order_by('-watch_num')[:60].values('url', 'name', 'room_thumb', 'watch_num',
+                                              'room_desc', 'platform_name')
 
     serialized_filter_info = json.dumps(list(filter_info), cls=DjangoJSONEncoder)
 
